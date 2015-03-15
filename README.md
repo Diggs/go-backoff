@@ -8,13 +8,13 @@ Instantiate and use a Backoff instance for the lifetime of a go routine. Call ba
 
 ```go
   // Back off linearly, starting at 250ms, capping at 16 seconds
-  s.linear = backoff.NewLinear(250*time.Millisecond, 16*time.Second)
+  linear = backoff.NewLinear(250*time.Millisecond, 16*time.Second)
   // Back off exponentially, starting at 5 seconds, capping at 320 seconds
-  s.exp = backoff.NewExponential(5*time.Second, 320*time.Second)
+  exp = backoff.NewExponential(5*time.Second, 320*time.Second)
   // Back off exponentially, starting at 1 minute, with no cap
-  s.expt = backoff.NewExponential(time.Minute, 0)
+  expt = backoff.NewExponential(time.Minute, 0)
   // Back off between 0 and exponentially, starting at 30 seconds, capping at 10 minutes
-  s.expj = backoff.NewExponentialFullJitter(30*time.Second, 10*time.Minute)
+  expj = backoff.NewExponentialFullJitter(30*time.Second, 10*time.Minute)
 
   ...
 
