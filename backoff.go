@@ -34,24 +34,24 @@ func NewBackoff(strategy BackoffStrategy, start time.Duration, limit time.Durati
 }
 
 // Reset sets the Backoff to its initial conditions ready to start over.
-func (exp *Backoff) Reset() {
-	exp.count = 0
-	exp.LastDuration = 0
-	exp.NextDuration = exp.getNextDuration()
+func (b *Backoff) Reset() {
+	b.count = 0
+	b.LastDuration = 0
+	b.NextDuration = b.getNextDuration()
 }
 
 // Backoff causes the current thread/routine to sleep for NextDuration.
-func (exp *Backoff) Backoff() {
-	time.Sleep(exp.NextDuration)
-	exp.count++
-	exp.LastDuration = exp.NextDuration
-	exp.NextDuration = exp.getNextDuration()
+func (b *Backoff) Backoff() {
+	time.Sleep(b.NextDuration)
+	b.count++
+	b.LastDuration = b.NextDuration
+	b.NextDuration = b.getNextDuration()
 }
 
-func (exp *Backoff) getNextDuration() time.Duration {
-	backoff := exp.strategy.GetBackoffDuration(exp.count, exp.start, exp.LastDuration)
-	if exp.limit > 0 && backoff > exp.limit {
-		backoff = exp.limit
+func (b *Backoff) getNextDuration() time.Duration {
+	backoff := b.strategy.GetBackoffDuration(b.count, b.start, b.LastDuration)
+	if b.limit > 0 && backoff > b.limit {
+		backoff = b.limit
 	}
 	return backoff
 }
