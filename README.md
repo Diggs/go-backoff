@@ -21,7 +21,7 @@ Instantiate and use a Backoff instance for the lifetime of a go routine. Call ba
   for {
     err := tryDoThing()
     if err != nil {
-      glog.Debugf("Backing off %d second(s)", exp.GetBackoffDuration()/time.Second)
+      glog.Debugf("Backing off %d second(s)", exp.NextDuration()/time.Second)
       exp.Backoff()
     } else {
       exp.Reset()
