@@ -26,7 +26,7 @@ type Backoff struct {
 	strategy     BackoffStrategy
 }
 
-// Creates a new backoff using the specified BackoffStrategy, start duration and limit.
+// NewBackoff creates a new Backoff using the specified BackoffStrategy, start duration and limit.
 func NewBackoff(strategy BackoffStrategy, start time.Duration, limit time.Duration) *Backoff {
 	backoff := Backoff{strategy: strategy, start: start, limit: limit}
 	backoff.Reset()
