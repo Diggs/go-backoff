@@ -72,6 +72,9 @@ type exponentialFullJitter struct{}
 
 func (exponentialFullJitter) GetBackoffDuration(backoffCount int, start time.Duration, lastBackoff time.Duration) time.Duration {
 	backoff := exponential{}.GetBackoffDuration(backoffCount, start, lastBackoff)
+	if backoff <= 0 {
+		return backoff
+	}
 	jitter, _ := rand.Int(rand.Reader, big.NewInt(int64(backoff)))
 	return time.Duration(jitter.Int64())
 }
