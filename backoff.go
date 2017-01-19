@@ -68,12 +68,18 @@ func NewExponential(start time.Duration, limit time.Duration) *Backoff {
 	return NewBackoff(exponential{}, start, limit)
 }
 
-type exponentialFullJitter struct{}
+type exponentialFullJitter struct {
+	limit time.Duration
+}
 
-func (exponentialFullJitter) GetBackoffDuration(backoffCount int, start time.Duration, lastBackoff time.Duration) time.Duration {
+func (b exponentialFullJitter) GetBackoffDuration(backoffCount int, start time.Duration, lastBackoff time.Duration) time.Duration {
 	backoff := exponential{}.GetBackoffDuration(backoffCount, start, lastBackoff)
 	if backoff <= 0 {
 		return backoff
+	}
+	// apply limit here to ensure the jitter falls btween 0-min(limit,backoff)
+	if b.limit > 0 && backoff > b.limit {
+		backoff = b.limit
 	}
 	jitter, _ := rand.Int(rand.Reader, big.NewInt(int64(backoff)))
 	return time.Duration(jitter.Int64())
@@ -81,7 +87,7 @@ func (exponentialFullJitter) GetBackoffDuration(backoffCount int, start time.Dur
 
 // NewExponentialFullJitter creates a new backoff using the exponential with full jitter backoff algorithm.
 func NewExponentialFullJitter(start time.Duration, limit time.Duration) *Backoff {
-	return NewBackoff(exponentialFullJitter{}, start, limit)
+	return NewBackoff(exponentialFullJitter{limit: limit}, start, limit)
 }
 
 type linear struct{}
