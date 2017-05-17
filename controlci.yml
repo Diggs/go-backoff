@@ -1,0 +1,11 @@
+---
+unit:
+  description: Runs unit tests
+  docker_image: golang:1.7.5
+  auto: true
+  command: |
+    SRC_DIR=$GOPATH/src/go-backoff
+    ln -sf $(pwd) $SRC_DIR
+    cd $SRC_DIR
+    go get github.com/tools/godep
+    godep go test -v ./...
